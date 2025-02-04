@@ -8,5 +8,5 @@ function solution(n) {
       divisors.push((n - 1) / i);
     }
   }
-  return Math.min(...divisors.sort());
+  return Math.min(...divisors);
 }
