@@ -1,7 +1,7 @@
 function solution(dartResult) {
   const answer = [];
   const points = dartResult.match(/\d+/g).map((point) => Number(point));
-  const events = dartResult.match(/(?<=\d)([A-Z\W+][\W]*)/g);
+  const events = dartResult.match(/([A-Z][\W]*)/g);
   points.forEach((point, index) => {
     const event = events[index];
     const [bonus, option] = event.split("");
