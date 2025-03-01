@@ -1,7 +1,4 @@
 function solution(s, n) {
-    var answer = '';
-    return answer;
-}function solution(s, n) {
   return s
     .split("")
     .map((char) => {
