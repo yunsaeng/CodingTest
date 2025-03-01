@@ -4,8 +4,10 @@ function solution(storage, requests) {
   // BFS를 사용하여 외각인지 확인하는 함수
   const isOutside = (row, col) => {
     const queue = [[row, col]];
-    const visited = new Set();
-    visited.add(`${row},${col}`);
+    const visited = Array.from({ length: storage.length }, () =>
+      Array(storage[0].length).fill(false)
+    );
+    visited[row][col] = true;
 
     while (queue.length) {
       const [r, c] = queue.shift();
@@ -34,11 +36,11 @@ function solution(storage, requests) {
           nr < storage.length &&
           nc >= 0 &&
           nc < storage[0].length &&
-          !visited.has(`${nr},${nc}`)
+          !visited[nr][nc]
         ) {
           if (storage[nr][nc] !== "") continue; // 빈 칸이 아니면 탐색X
           queue.push([nr, nc]);
-          visited.add(`${nr},${nc}`);
+          visited[nr][nc] = true;
         }
       }
     }
