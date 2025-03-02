@@ -1,14 +1,4 @@
 function solution(players, m, k) {
-  let answer = [];
-  players.forEach((player, idx) => {
-    const needServers = Math.floor(player / m);
-    const currentServers = answer.filter((e) => e + k > idx).length;
-    if (needServers > currentServers) {
-      for (let i = 1; i <= needServers - currentServers; i++) {
-        answer.push(idx);
-      }
-    }
-  });function solution(players, m, k) {
   let answer = 0;
   let activeServers = 0; // 현재 사용 중인 서버 개수
   let endTimes = []; // 각 서버가 끝나는 시간
@@ -32,6 +22,4 @@ function solution(players, m, k) {
   });
 
   return answer;
-}
-  return answer.length;
 }
