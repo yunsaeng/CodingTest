@@ -1,63 +1,46 @@
 function solution(cap, n, deliveries, pickups) {
   let answer = 0;
-  let delivery_end = n;
-  const delivery_answer = [];
-  let pickup_end = n;
-  const pickup_answer = [];
+  let dLen = n;
+  let pLen = n;
 
-  while (delivery_end > 0) {
-    let pos_cap = cap;
-
-    if (deliveries[delivery_end - 1] === 0) {
-      delivery_end--;
-      continue;
+  while (dLen !== 0 || pLen !== 0) {
+    while (deliveries.at(-1) === 0 && deliveries.length > 0) {
+      deliveries.pop();
+      dLen--;
     }
 
-    delivery_answer.push(delivery_end);
-    while (delivery_end > 0 && pos_cap > 0) {
-      if (deliveries[delivery_end - 1] > pos_cap) {
-        deliveries[delivery_end - 1] -= pos_cap;
-        pos_cap = 0;
+    while (pickups.at(-1) === 0 && pickups.length > 0) {
+      pickups.pop();
+      pLen--;
+    }
+
+    let totalLen = Math.max(dLen, pLen);
+    let dCap = cap;
+    let pCap = cap;
+
+    while (dCap !== 0 && deliveries.length > 0) {
+      if (deliveries.at(-1) <= dCap) {
+        const dPop = deliveries.pop();
+        dLen--;
+        dCap -= dPop;
       } else {
-        pos_cap -= deliveries[delivery_end - 1];
-        delivery_end--;
+        deliveries[deliveries.length - 1] -= dCap;
+        dCap = 0;
       }
     }
-  }
 
-  while (pickup_end > 0) {
-    let pos_cap = cap;
-
-    if (pickups[pickup_end - 1] === 0) {
-      pickup_end--;
-      continue;
-    }
-
-    pickup_answer.push(pickup_end);
-    while (pickup_end > 0 && pos_cap > 0) {
-      if (pickups[pickup_end - 1] > pos_cap) {
-        pickups[pickup_end - 1] -= pos_cap;
-        pos_cap = 0;
+    while (pCap !== 0 && pickups.length > 0) {
+      if (pickups.at(-1) <= pCap) {
+        const pPop = pickups.pop();
+        pLen--;
+        pCap -= pPop;
       } else {
-        pos_cap -= pickups[pickup_end - 1];
-        pickup_end--;
+        pickups[pickups.length - 1] -= pCap;
+        pCap = 0;
       }
     }
+
+    answer += totalLen * 2;
   }
-
-  let index = 0;
-  while (delivery_answer[index] || pickup_answer[index]) {
-    if (
-      pickup_answer[index] >= delivery_answer[index] ||
-      !delivery_answer[index]
-    )
-      answer += pickup_answer[index] * 2;
-
-    if (delivery_answer[index] > pickup_answer[index] || !pickup_answer[index])
-      answer += delivery_answer[index] * 2;
-
-    index++;
-  }
-
   return answer;
 }
