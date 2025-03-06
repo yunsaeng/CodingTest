@@ -1,46 +1,33 @@
 function solution(cap, n, deliveries, pickups) {
   let answer = 0;
-  let dLen = n;
-  let pLen = n;
+  let [dIdx, pIdx] = [n - 1, n - 1];
 
-  while (dLen !== 0 || pLen !== 0) {
-    while (deliveries.at(-1) === 0 && deliveries.length > 0) {
-      deliveries.pop();
-      dLen--;
-    }
+  while (dIdx >= 0 || pIdx >= 0) {
+    while (deliveries[dIdx] === 0) dIdx--;
+    while (pickups[pIdx] === 0) pIdx--;
 
-    while (pickups.at(-1) === 0 && pickups.length > 0) {
-      pickups.pop();
-      pLen--;
-    }
+    answer += Math.max(dIdx + 1, pIdx + 1) * 2;
+    let [dCap, pCap] = [cap, cap];
 
-    let totalLen = Math.max(dLen, pLen);
-    let dCap = cap;
-    let pCap = cap;
-
-    while (dCap !== 0 && deliveries.length > 0) {
-      if (deliveries.at(-1) <= dCap) {
-        const dPop = deliveries.pop();
-        dLen--;
-        dCap -= dPop;
+    while (dCap > 0 && dIdx >= 0) {
+      if (deliveries[dIdx] <= dCap) {
+        dCap -= deliveries[dIdx];
+        dIdx--;
       } else {
-        deliveries[deliveries.length - 1] -= dCap;
+        deliveries[dIdx] -= dCap;
         dCap = 0;
       }
     }
 
-    while (pCap !== 0 && pickups.length > 0) {
-      if (pickups.at(-1) <= pCap) {
-        const pPop = pickups.pop();
-        pLen--;
-        pCap -= pPop;
+    while (pCap > 0 && pIdx >= 0) {
+      if (pickups[pIdx] <= pCap) {
+        pCap -= pickups[pIdx];
+        pIdx--;
       } else {
-        pickups[pickups.length - 1] -= pCap;
+        pickups[pIdx] -= pCap;
         pCap = 0;
       }
     }
-
-    answer += totalLen * 2;
   }
   return answer;
 }
