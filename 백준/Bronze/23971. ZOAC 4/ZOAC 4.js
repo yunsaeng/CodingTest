@@ -18,11 +18,5 @@ rl.on("line", function (line) {
 function solution(input) {
   const [H, W, N, M] = input[0].split(" ").map(Number);
 
-  let answer = 0;
-  for (let i = 0; i < H; i += N + 1) {
-    for (let j = 0; j < W; j += M + 1) {
-      answer++;
-    }
-  }
-  console.log(answer);
+  console.log(Math.ceil(H / (N + 1)) * Math.ceil(W / (M + 1)));
 }
