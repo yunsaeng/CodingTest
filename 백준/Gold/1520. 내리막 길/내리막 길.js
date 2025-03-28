@@ -48,6 +48,5 @@ function solution(input) {
     return dp[row][col];
   };
 
-  dfs(0, 0);
-  console.log(dp[0][0]);
+  console.log(dfs(0, 0));
 }
