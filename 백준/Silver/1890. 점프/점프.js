@@ -1,44 +1,35 @@
-const input = require("fs")
-  .readFileSync("/dev/stdin")
-  .toString()
-  .trim()
-  .split("\n");
+const fs = require("fs");
+const readline = require("readline");
 
-const input_N = Number(input[0]);
-input.shift();
-const input_board = input.map((v) => v.trim().split(" ").map(Number));
+const rl = readline.createInterface({
+  input: process.stdin, // 백준 제출 시
+  // input: fs.createReadStream("./example.txt"), // 로컬 테스트용
+});
 
-function solution(N, board) {
-  const move = (location, dist, check) => {
-    return check === 0
-      ? [location[0] + dist, location[1]]
-      : [location[0], location[1] + dist];
-  };
+const input = [];
 
-  const validate = (x, y) => {
-    if (x === N - 1 && y === N - 1) return 1;
-    if (dp[x][y] !== BigInt(-1)) return dp[x][y];
+rl.on("line", function (line) {
+  input.push(line);
+}).on("close", function () {
+  solution(input);
+  process.exit();
+});
 
-    return "allow";
-  };
+function solution(input) {
+  const N = +input[0];
+  const board = input.slice(1).map((line) => line.split(" ").map(Number));
+  const dp = Array.from({ length: N }, () => Array(N).fill(0n));
+  dp[0][0] = 1n;
 
-  const dfs = (x, y) => {
-    const check = validate(x, y);
-    if (check !== "allow") return BigInt(check);
-    dp[x][y] = BigInt(0);
-    for (let i = 0; i < 2; i++) {
-      const [mx, my] = move([x, y], board[x][y], i);
-      if (mx < 0 || mx >= N || my < 0 || my >= N) continue;
-      dp[x][y] += dfs(mx, my);
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < N; j++) {
+      const jump = board[i][j];
+      if (jump === 0 || dp[i][j] === 0n) continue;
+
+      if (i + jump < N) dp[i + jump][j] += dp[i][j];
+      if (j + jump < N) dp[i][j + jump] += dp[i][j];
     }
+  }
 
-    return dp[x][y];
-  };
-
-  const dp = Array.from(Array(N), () => Array(N).fill(BigInt(-1)));
-  const answer = dfs(0, 0);
-
-  return answer.toString();
+  console.log(dp[N - 1][N - 1].toString());
 }
-
-console.log(solution(input_N, input_board));
