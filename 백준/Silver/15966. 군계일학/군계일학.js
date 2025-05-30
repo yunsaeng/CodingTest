@@ -18,13 +18,17 @@ rl.on("line", function (line) {
 function solution(input) {
   const N = +input[0];
   const a = input[1].split(" ").map(Number);
-  const dp = Array(N).fill(1);
+  const dp = new Map();
+  let maxLen = 1;
 
-  for (let i = 0; i < N - 1; i++) {
-    for (let j = i + 1; j < N; j++) {
-      if (a[j] === a[i] + dp[i]) dp[i]++;
-    }
+  for (let i = 0; i < N; i++) {
+    const val = a[i];
+    const prev = dp.get(val - 1) || 0;
+    const curr = prev + 1;
+
+    dp.set(val, curr);
+    maxLen = Math.max(maxLen, curr);
   }
 
-  console.log(Math.max(...dp));
+  console.log(maxLen);
 }
