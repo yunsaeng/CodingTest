@@ -17,18 +17,18 @@ rl.on("line", function (line) {
 
 function solution(input) {
   const N = +input[0];
-  const len = input[1].split(" ").map(Number);
-  const oil = input[2].split(" ").map(Number);
-  const city = len.length;
+  const len = input[1].split(" ").map(BigInt);
+  const oil = input[2].split(" ").map(BigInt);
 
-  for (let i = 1; i < city; i++) {
-    for (let j = 0; j < i; j++) {
-      oil[i] = Math.min(oil[i], oil[j]);
+  let result = 0n;
+  let minPrice = oil[0];
+
+  for (let i = 0; i < N - 1; i++) {
+    result += minPrice * len[i];
+    if (oil[i + 1] < minPrice) {
+      minPrice = oil[i + 1];
     }
   }
 
-  let result = 0;
-  for (let i = 0; i < city; i++) result += oil[i] * len[i];
-
-  console.log(result);
+  console.log(result.toString());
 }
