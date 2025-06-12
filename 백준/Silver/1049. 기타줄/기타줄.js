@@ -18,16 +18,21 @@ rl.on("line", function (line) {
 function solution(input) {
   let [N, M] = input[0].split(" ").map(Number);
   const shop = input.slice(1).map((line) => line.split(" ").map(Number));
-  const packageCost = shop.sort((a, b) => a[0] - b[0])[0][0];
-  const eachCost = shop.sort((a, b) => a[1] - b[1])[0][1];
 
-  if (packageCost >= eachCost * 6) console.log(eachCost * N);
-  else {
-    let result = 0;
-    result += Math.floor(N / 6) * packageCost;
-    N %= 6;
-    result += packageCost < eachCost * N ? packageCost : eachCost * N;
+  let minPackage = Infinity;
+  let minEach = Infinity;
 
-    console.log(result);
+  for (const [pkg, each] of shop) {
+    minPackage = Math.min(minPackage, pkg);
+    minEach = Math.min(minEach, each);
+  }
+
+  if (minPackage >= minEach * 6) {
+    console.log(minEach * N);
+  } else {
+    const bundle = Math.floor(N / 6);
+    const remain = N % 6;
+    const cost = bundle * minPackage + Math.min(minPackage, remain * minEach);
+    console.log(cost);
   }
 }
