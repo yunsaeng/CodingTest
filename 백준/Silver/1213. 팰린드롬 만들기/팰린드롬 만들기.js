@@ -16,39 +16,31 @@ rl.on("line", function (line) {
 });
 
 function solution(input) {
-  const str = input[0].split("").sort().join("");
-  const count = {};
-  str.replace(/./g, (alpha) => {
-    count[alpha] = (count[alpha] || 0) + 1;
-  });
+  const str = input[0];
+  const count = Array(26).fill(0);
 
-  let isOdd = false;
-  let isCan = true;
-  let mid = "";
+  for (const ch of str) {
+    count[ch.charCodeAt(0) - 65]++;
+  }
 
-  for (const alpha in count) {
-    if (count[alpha] % 2 === 1) {
-      if (isOdd) {
-        isCan = false;
-        break;
-      } else {
-        isOdd = true;
-        mid = alpha;
+  let oddChar = "";
+  let halfStr = "";
+
+  for (let i = 0; i < 26; i++) {
+    const cnt = count[i];
+    const ch = String.fromCharCode(i + 65);
+
+    if (cnt % 2 === 1) {
+      if (oddChar) {
+        console.log("I'm Sorry Hansoo");
+        return;
       }
+      oddChar = ch;
     }
 
-    count[alpha] = Math.floor(count[alpha] / 2);
+    halfStr += ch.repeat(Math.floor(cnt / 2));
   }
 
-  if (!isCan) {
-    console.log("I'm Sorry Hansoo");
-  } else {
-    let result = "";
-    for (const alpha in count) {
-      result += alpha.repeat(count[alpha]);
-    }
-
-    result += mid + result.split("").reverse().join("");
-    console.log(result);
-  }
+  const result = halfStr + oddChar + [...halfStr].reverse().join("");
+  console.log(result);
 }
