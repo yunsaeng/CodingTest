@@ -17,24 +17,21 @@ rl.on("line", function (line) {
 
 function solution(input) {
   const str = input[0].split(".");
+  const result = [];
+  let isPossible = true;
 
-  let result = [];
   for (let s of str) {
     if (s.length % 2 === 1) {
-      result = -1;
+      isPossible = false;
       break;
     }
 
     let temp = "";
-    while (s.length >= 4) {
-      temp += "AAAA";
-      s = s.substr(4);
-    }
-
-    if (s) temp += "BB";
+    temp += "AAAA".repeat(Math.floor(s.length / 4));
+    if (s.length % 4 !== 0) temp += "BB";
 
     result.push(temp);
   }
 
-  console.log(result === -1 ? -1 : result.join("."));
+  console.log(isPossible ? result.join(".") : -1);
 }
