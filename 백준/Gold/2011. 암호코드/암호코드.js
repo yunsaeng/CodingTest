@@ -16,28 +16,28 @@ rl.on("line", function (line) {
 });
 
 function solution(input) {
-  const digit = [0, ...input[0].split("").map(Number)];
-  const N = digit.length - 1;
-  const dp = Array.from({ length: N + 2 }, () => Array(N + 2).fill(0));
+  const str = input[0];
+  const N = str.length;
+  const mod = 1000000;
+  const dp = Array(N + 1).fill(0);
 
-  for (let i = 1; i <= N; i++) {
-    if (digit[i] >= 1) dp[i][i] = 1;
+  if (str[0] === "0") {
+    console.log(0);
+    return;
   }
 
-  for (let len = 2; len <= N; len++) {
-    for (let s = 1; s <= N - len + 1; s++) {
-      const e = s + len - 1;
-      dp[s][e] += dp[s][e - 1] * dp[e][e];
+  dp[0] = 1; // 빈 문자열을 해석하는 방법 1개
+  dp[1] = 1;
 
-      const num = digit[e - 1] * 10 + digit[e];
-      if (num >= 10 && num <= 26) {
-        if (len === 2) dp[s][e]++;
-        else dp[s][e] += dp[s][e - 2];
-      }
+  for (let i = 2; i <= N; i++) {
+    const oneDigit = +str[i - 1];
+    const twoDigit = +str.slice(i - 2, i);
 
-      dp[s][e] %= 1000000;
-    }
+    if (oneDigit >= 1) dp[i] += dp[i - 1];
+    if (twoDigit >= 10 && twoDigit <= 26) dp[i] += dp[i - 2];
+
+    dp[i] %= mod;
   }
 
-  console.log(dp[1][N]);
+  console.log(dp[N]);
 }
