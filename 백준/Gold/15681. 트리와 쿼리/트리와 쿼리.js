@@ -17,10 +17,11 @@ rl.on("line", function (line) {
 
 function solution(input) {
   const [N, R, Q] = input[0].split(" ").map(Number);
-  const conn = input.slice(1, N).map((line) => line.split(" ").map(Number));
-  const graph = Array.from({ length: N + 1 }, () => []);
+  const edges = input.slice(1, N).map((line) => line.split(" ").map(Number));
+  const queries = input.slice(N).map(Number);
 
-  for (const [u, v] of conn) {
+  const graph = Array.from({ length: N + 1 }, () => []);
+  for (const [u, v] of edges) {
     graph[u].push(v);
     graph[v].push(u);
   }
@@ -30,16 +31,14 @@ function solution(input) {
 
   const dfs = (node) => {
     visited[node] = true;
-
     for (const child of graph[node]) {
-      if (!visited[child]) dp[node] += dfs(child);
+      if (!visited[child]) {
+        dp[node] += dfs(child);
+      }
     }
-
     return dp[node];
   };
 
   dfs(R);
-
-  const test = input.slice(N, N + Q).map(Number);
-  for (const t of test) console.log(dp[t]);
+  console.log(queries.map((q) => dp[q]).join("\n"));
 }
