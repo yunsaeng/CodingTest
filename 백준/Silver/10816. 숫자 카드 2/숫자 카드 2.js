@@ -17,23 +17,17 @@ rl.on("line", function (line) {
 
 function solution(input) {
   const N = +input[0];
-  const sequence = input[1].split(" ");
+  const A = input[1].split(" ").map(Number);
   const M = +input[2];
-  const testCases = input[3].split(" ");
+  const B = input[3].split(" ").map(Number);
 
-  const sequenceMap = new Map();
-  for (const value of sequence) {
-    if (sequenceMap.has(value))
-      sequenceMap.set(value, sequenceMap.get(value) + 1);
-    else sequenceMap.set(value, 1);
+  const OFFSET = 10_000_000;
+  const count = Array(2 * OFFSET + 1).fill(0); // index: 0 ~ 20,000,000
+
+  for (const num of A) {
+    count[num + OFFSET]++;
   }
 
-  const result = testCases.reduce((acc, cur) => {
-    if (sequenceMap.has(cur)) acc.push(sequenceMap.get(cur));
-    else acc.push(0);
-
-    return acc;
-  }, []);
-
+  const result = B.map((num) => count[num + OFFSET]);
   console.log(result.join(" "));
 }
