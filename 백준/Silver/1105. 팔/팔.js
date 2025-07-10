@@ -16,17 +16,14 @@ rl.on("line", function (line) {
 });
 
 function solution(input) {
-  const [L, R] = input[0].split(" ");
-  if (L.length !== R.length) {
-    console.log(0);
-    return;
-  }
+  let [L, R] = input[0].split(" ");
+  if (L.length !== R.length) return console.log(0);
 
-  const answer = [];
+  let count = 0;
   for (let i = 0; i < L.length; i++) {
     if (L[i] !== R[i]) break;
-    answer.push(L[i]);
+    if (L[i] === "8") count++;
   }
 
-  console.log(answer.filter((e) => e === "8").length);
+  console.log(count);
 }
