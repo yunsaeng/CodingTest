@@ -16,26 +16,17 @@ function solve() {
     sum[i] = sum[i - 1] + sequence[i];
   }
 
-  let result = 0n;
-  for (let i = 1; i < N - 2; i++) {
-    if (sum[i] !== sum[N - 1] - sum[i]) continue;
+  if (sum[N - 1] % 4n !== 0n) return 0;
 
-    let temp1 = 0n;
-    for (let j = 0; j < i; j++) {
-      if (sum[j] !== sum[i] - sum[j]) continue;
-      temp1 += 1n;
-    }
-
-    let temp2 = 0n;
-    for (let k = i + 1; k < N - 1; k++) {
-      if (sum[k] - sum[i] !== sum[N - 1] - sum[k]) continue;
-      temp2 += 1n;
-    }
-
-    result += temp1 * temp2;
+  let i = 0n;
+  let j = 0n;
+  let k = 0n;
+  for (let idx = 0; idx < N - 1; idx++) {
+    if (sum[idx] === (3n * sum[N - 1]) / 4n) k += j;
+    if (sum[idx] === sum[N - 1] / 2n) j += i;
+    if (sum[idx] === sum[N - 1] / 4n) i += 1n;
   }
-
-  return result.toString();
+  return k.toString();
 }
-// 결과 출력
+
 console.log(solve());
