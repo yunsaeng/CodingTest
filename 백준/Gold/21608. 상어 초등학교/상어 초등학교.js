@@ -7,24 +7,24 @@ const input = fs.readFileSync(inputPath).toString().trim().split("\n");
 function solve() {
   const it = input.values();
   const N = +it.next().value;
-  const likes = Array.from({ length: N * N + 1 }, () => []);
-  const orders = [];
+  const preferences = Array.from({ length: N * N + 1 }, () => []);
+  const studentOrder = [];
   for (let i = 0; i < N * N; i++) {
-    const [person, ...like] = it.next().value.split(" ").map(Number);
-    likes[person].push(...like);
-    orders.push(person);
+    const [student, ...like] = it.next().value.split(" ").map(Number);
+    preferences[student].push(...like);
+    studentOrder.push(student);
   }
   const classroom = Array.from({ length: N }, () => Array(N).fill(0));
 
-  const nearCnt = (person, row, col) => {
+  const getAdjacencyInfo = (student, row, col) => {
     const dirs = [
       [1, 0],
       [-1, 0],
       [0, 1],
       [0, -1],
     ];
-    let cnt = 0;
-    let empty = 0;
+    let likeCount = 0;
+    let emptyCount = 0;
 
     for (const [dr, dc] of dirs) {
       const nr = row + dr;
@@ -32,51 +32,61 @@ function solve() {
       if (nr >= 0 && nr < N && nc >= 0 && nc < N) {
         const near = classroom[nr][nc];
         if (near === 0) {
-          empty++;
+          emptyCount++;
         } else {
-          if (likes[person].includes(near)) cnt++;
+          if (preferences[student].includes(near)) likeCount++;
         }
       }
     }
 
-    return { cnt, empty };
+    return { likeCount, emptyCount };
   };
 
-  const sitPosition = (person) => {
-    const positions = Array.from({ length: 5 }, () => []);
+  const compare = (currentBest, newCandidate) => {
+    if (newCandidate.likeCount !== currentBest.likeCount) {
+      return newCandidate.likeCount > currentBest.likeCount;
+    }
+    if (newCandidate.emptyCount !== currentBest.emptyCount) {
+      return newCandidate.emptyCount > currentBest.emptyCount;
+    }
+    if (newCandidate.row !== currentBest.row) {
+      return newCandidate.row < currentBest.row;
+    }
+    return newCandidate.col < currentBest.col;
+  };
+
+  const findBestSeat = (student) => {
+    let bestSeat = null;
 
     for (let row = 0; row < N; row++) {
       for (let col = 0; col < N; col++) {
-        if (classroom[row][col] === 0) {
-          const { cnt, empty } = nearCnt(person, row, col);
-          positions[cnt].push({ row, col, empty });
+        if (classroom[row][col] !== 0) continue;
+
+        const { likeCount, emptyCount } = getAdjacencyInfo(student, row, col);
+
+        if (
+          !bestSeat ||
+          compare(bestSeat, { row, col, likeCount, emptyCount })
+        ) {
+          bestSeat = { row, col, likeCount, emptyCount };
         }
       }
     }
 
-    for (let i = 4; i >= 0; i--) {
-      if (positions[i].length !== 0) {
-        positions[i].sort(
-          (a, b) => b.empty - a.empty || a.row - b.row || a.col - b.col,
-        );
-        return positions[i][0];
-      }
-    }
-
-    return new Error();
+    return bestSeat;
   };
 
-  for (const person of orders) {
-    const { row, col, empty } = sitPosition(person);
-    classroom[row][col] = person;
+  for (const student of studentOrder) {
+    const { row, col } = findBestSeat(student);
+    classroom[row][col] = student;
   }
 
   let result = 0;
   for (let row = 0; row < N; row++) {
     for (let col = 0; col < N; col++) {
-      const person = classroom[row][col];
-      const { cnt, empty } = nearCnt(person, row, col);
-      result += cnt === 0 ? 0 : Math.pow(10, cnt - 1);
+      const student = classroom[row][col];
+      const { likeCount } = getAdjacencyInfo(student, row, col);
+      result += likeCount === 0 ? 0 : Math.pow(10, likeCount - 1);
     }
   }
 
