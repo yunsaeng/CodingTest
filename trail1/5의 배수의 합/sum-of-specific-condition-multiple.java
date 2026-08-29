@@ -6,7 +6,6 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         int A = sc.nextInt(), B = sc.nextInt();
         int sum = 0;
-        int cnt = 0;
         for(int i = Math.min(A, B); i <= Math.max(A, B); i++) {
             if(i % 5 == 0) {
                 sum += i;
