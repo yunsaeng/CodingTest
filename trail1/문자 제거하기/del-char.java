@@ -6,10 +6,8 @@ public class Main {
 
         String str = sc.next();
         while(str.length() > 1) {
-            int index = sc.nextInt();
-            str = index >= str.length() - 1 
-            ? str.substring(0, str.length() - 1)
-            : str.substring(0, index) + str.substring(index + 1);
+            int index = Math.min(sc.nextInt(), str.length() - 1);
+            str = str.substring(0, index) + str.substring(index + 1);
             System.out.println(str);
         }
     }
