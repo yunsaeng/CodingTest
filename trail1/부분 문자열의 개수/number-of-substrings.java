@@ -1,0 +1,16 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        String str = sc.next();
+        String target = sc.next();
+        int index = 0, cnt = 0;
+        while((index = str.indexOf(target, index)) != -1) {
+            index++;
+            cnt++;
+        }
+        System.out.println(cnt);
+    }
+}
