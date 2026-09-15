@@ -16,15 +16,6 @@ public class Main {
         
         Arrays.sort(a);
         Arrays.sort(b);
-
-        boolean isSame = true;
-        for(int i = 0; i < n; i++) {
-            if(a[i] != b[i]) {
-                isSame = false;
-                break;
-            }
-        }
-
-        System.out.println(isSame ? "Yes" : "No");
+        System.out.println(Arrays.equals(a, b) ? "Yes" : "No");
     }
 }
