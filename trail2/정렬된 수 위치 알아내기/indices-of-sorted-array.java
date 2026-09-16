@@ -1,33 +1,31 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
+class Element{
+    int num, prev, move;
+}
+
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        
+
         int n = sc.nextInt();
-        int[] arr = new int[n];
+        Element[] sequence = new Element[n];
         for (int i = 0; i < n; i++) {
-            arr[i] = sc.nextInt();
+            sequence[i] = new Element();
+            sequence[i].num = sc.nextInt();
+            sequence[i].prev = i + 1;
         }
-        
-        Integer[] indices = new Integer[n];
-        for (int i = 0; i < n; i++) {
-            indices[i] = i;
-        }
-        
-        Arrays.sort(indices, (a, b) -> {
-            if(arr[a] != arr[b]) return arr[a] - arr[b];
-            return a - b;
+
+        Arrays.sort(sequence, (a, b) -> {
+            if(a.num != b.num) return a.num - b.num;
+            return a.prev - b.prev;
         });
-        
-        int[] result = new int[n];
         for (int i = 0; i < n; i++) {
-            result[indices[i]] = i + 1;
+            sequence[i].move = i + 1;
         }
-        
-        for (int i = 0; i < n; i++) {
-            System.out.print(result[i] + " ");
-        }
+
+        Arrays.sort(sequence, (a, b) -> a.prev - b.prev);
+        for(Element e : sequence) System.out.print(e.move + " ");
     }
 }
