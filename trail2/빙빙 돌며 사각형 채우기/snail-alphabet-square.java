@@ -1,0 +1,36 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        
+        char[][] board = new char[n][m];
+        int[] dirR = {-1, 0, 1, 0};
+        int[] dirC = {0, 1, 0, -1};
+        int r = 0, c = 0, dirIdx = 1, cur = 0;
+        board[0][0] = 'A';
+        while(cur < n * m - 1) {
+            int nr = r + dirR[dirIdx];
+            int nc = c + dirC[dirIdx];
+            
+            if(nr < 0 || nr >= n || nc < 0 || nc >= m || board[nr][nc] != 0) {
+                dirIdx = (dirIdx + 1) % 4;
+                continue;
+            }
+
+            cur++;
+            board[nr][nc] = (char)((cur % 26) + 65);       
+            r = nr;
+            c = nc;
+        }
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
