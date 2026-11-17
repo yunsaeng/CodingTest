@@ -10,19 +10,7 @@ public class Main {
         }
         Arrays.sort(arr);
 
-        int a = arr[0], b = arr[1], c = 0, d = 0;
-        int cd = arr[14] - a - b;
-
-        for(int i = 2; i <= 14; i++) {
-            for(int j = i + 1; j <= 14; j++) {
-                if(arr[i] + arr[j] == cd) {
-                    c = arr[i];
-                    d = arr[j];
-                    break;
-                }
-                if(c != 0 && d != 0) break;
-            }
-        }
+        int a = arr[0], b = arr[1], c = arr[2], d = arr[14] - a - b -c;
 
         System.out.printf("%d %d %d %d", a, b, c, d);
     }
