@@ -10,9 +10,7 @@ public class Main {
         }
         Arrays.sort(arr);
 
-        int a = arr[0], b = arr[1], c = 0;;
-        if(a + b + arr[2] == arr[6]) c = arr[2];
-        else c = arr[3];
+        int a = arr[0], b = arr[1], c = arr[6] - a - b;
 
         System.out.printf("%d %d %d", a, b, c);
     }
